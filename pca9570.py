@@ -14,11 +14,16 @@ class Pca9570(object):
     _debug = False
     _i2c_addr = -1
 
-    def __init__(self, bus=0, address=0b0100100, debug=False):
+    def __init__(self, bus=0, preinited_bus=None, address=0b0100100, debug=False):
         # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1), etc
-        if debug:
-            print("using bus {0}, address {1}".format(bus, address))
-        self._bus = smbus.SMBus(bus)
+        if preinited_bus is not None:
+            if debug:
+                print("using preinited-bus, address {0}".format(address))
+            self._bus = preinited_bus
+        else:
+            if debug:
+                print("init-ing bus {0}, address {1}".format(bus, address))
+            self._bus = smbus.SMBus(bus)
         self._i2c_addr = address
         self._debug = debug
         self.reset()
