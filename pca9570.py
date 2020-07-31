@@ -49,9 +49,11 @@ class Pca9570(object):
         """ this sets 1 pin, leaving the others in the current state
         """
         out_state = self._bus.read_byte(self._i2c_addr)
-        out_state &= ~(1 << pin)
+        mask = 1 << pin
+        # clear the bit corresponding to the pin
+        out_state &= ~ mask
         if value:
-            out_state |= 1 << pin
+            out_state |= mask
 
         self._bus.write_byte(self._i2c_addr, out_state)
 
